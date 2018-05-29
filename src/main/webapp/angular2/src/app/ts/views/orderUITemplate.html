@@ -36,7 +36,7 @@
                         </div>
                     </div>
                     <div class="panel-body ">
-                        <div class="col-sm-2">
+                        <div class="col-sm-1">
                             <label>Line Number</label>
                         </div>
                         <div class="col-sm-2">
@@ -51,22 +51,24 @@
                         <div class="col-sm-2">
                             <label>State</label>
                         </div>
-
+                        <div class="col-sm-2">
+                            <button type="button" (click)="addNewLine()" class="btn btn-default">Add New Line</button>
+                        </div>
                         <div class="row">
                             <div class="form-group col-sm-12 scrollable0panel">
                                 <div class="row" *ngFor="let line of CurrentOrder.orderLines">
-                                    <input type="text" class="col-sm-2" [(ngModel)]="line.lineNumber" name="lineNumber" id="lineNumber">
+                                    <input type="text" class="col-sm-1" [(ngModel)]="line.lineNumber" name="lineNumber" id="lineNumber">
                                     <input type="text" class="col-sm-2" [(ngModel)]="line.itemName" name="itemName" id="itemName">
                                     <input type="text" class="col-sm-2" [(ngModel)]="line.quantity" name="quantity" id="quantity">
                                     <input type="text" class="col-sm-2" [(ngModel)]="line.price" name="price" id="price">
                                     <input type="text" class="col-sm-2" [(ngModel)]="line.state" name="state" id="state">
-                                    <div class="col-sm-2"></div>
+                                    
                                 </div>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-default" [disabled]="!orderForm.form.valid"> Create Order</button>
 
-                        <button type="button" (click)="addNewLine()" class="btn btn-default">Add New Line</button>
+                        
                     </div>
                 </form>
             </div>
