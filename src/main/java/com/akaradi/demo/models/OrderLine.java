@@ -13,45 +13,71 @@ public class OrderLine {
 	@Id
 	@GeneratedValue
 	private long orderLineId;
-	
+
 	private String itemName;
+	private long quantity;
+	private long lineNumber;
 	private double price;
 	private State state;
-	
+
 	@ManyToOne
 	@JsonIgnore
 	private Order order;
-	
+
 	public Order getOrder() {
 		return order;
 	}
+
 	public void setOrder(Order order) {
 		this.order = order;
 	}
+
 	public long getOrderLineId() {
 		return orderLineId;
 	}
+
 	public void setOrderLineId(long orderLineId) {
 		this.orderLineId = orderLineId;
 	}
+
 	public String getItemName() {
 		return itemName;
 	}
+
 	public void setItemName(String itemName) {
 		this.itemName = itemName;
 	}
+
 	public double getPrice() {
 		return price;
 	}
+
 	public void setPrice(double price) {
 		this.price = price;
 	}
+
 	public State getState() {
 		return state;
 	}
+
 	public void setState(State state) {
 		this.state = state;
 	}
 
-	
+	public long getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(long quantity) {
+		this.quantity = quantity;
+	}
+
+	public long getLineNumber() {
+		return lineNumber;
+	}
+
+	public void setLineNumber(long lineNumber) {
+		this.lineNumber = lineNumber;
+	}
+
 }

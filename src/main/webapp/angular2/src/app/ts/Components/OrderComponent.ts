@@ -2,6 +2,7 @@ import { Order } from "../Models/Order";
 import { Component } from "@angular/core";
 import { OrderLine } from "../Models/OrderLine";
 import { OrderService } from "../Service/OrderService";
+import { runInThisContext } from "vm";
 
 @Component({
     selector: "order-ui",
@@ -43,7 +44,7 @@ export class OrderComponent {
             );
     }
     public addNewLine() {
-        let lineNumber = this.CurrentOrder.orderLines.length +1;
+        let lineNumber = this.CurrentOrder.orderLines.length + 1;
         this.CurrentOrder.orderLines.push(new OrderLine(lineNumber));
     }
 
@@ -54,6 +55,15 @@ export class OrderComponent {
                 err => console.error(err),
                 () => console.log('done loading orders')
             );
+    }
+
+    public showOrder(orderId: number) {
+        this.CurrentOrder = null;
+        
+        let searchedOrder = this.orders.find(order => order.orderId === orderId);
+        if (searchedOrder) {
+            this.CurrentOrder = searchedOrder;
+        }
     }
 
 

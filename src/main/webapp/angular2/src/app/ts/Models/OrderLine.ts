@@ -9,5 +9,6 @@ export class OrderLine {
 
     constructor(lnumber: number){
         this.lineNumber = lnumber;
+        this.state = "Draft";
     }
 } 
