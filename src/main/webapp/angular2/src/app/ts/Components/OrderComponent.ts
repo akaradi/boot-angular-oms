@@ -13,12 +13,12 @@ import { OrderService } from "../Service/OrderService";
     providers: [OrderService]
 })
 export class OrderComponent {
-    CurrentOrder: Order = new Order();
+    CurrentOrder: Order;
     orders: Order[] = [];
     displayError: string;
 
     constructor(private orderService: OrderService) {
-
+        this.CurrentOrder = new Order();
     }
 
     public get value(): string {
@@ -43,7 +43,8 @@ export class OrderComponent {
             );
     }
     public addNewLine() {
-        this.CurrentOrder.orderLines.push(new OrderLine());
+        let lineNumber = this.CurrentOrder.orderLines.length +1;
+        this.CurrentOrder.orderLines.push(new OrderLine(lineNumber));
     }
 
     public get() {

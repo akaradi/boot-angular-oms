@@ -6,4 +6,8 @@ export class OrderLine {
 	price: number;
     state: string;
     quantity: number;
+
+    constructor(lnumber: number){
+        this.lineNumber = lnumber;
+    }
 } 

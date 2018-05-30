@@ -11,6 +11,6 @@ export class Order{
 	orderId: number;
 	orderLines: OrderLine[] = [];
 	constructor(){
-		this.orderLines.push(new OrderLine());
+		this.orderLines.push(new OrderLine(1));
 	}
 }
