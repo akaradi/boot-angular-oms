@@ -1,5 +1,5 @@
 import { Order } from "../Models/Order";
-import { Component } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { OrderLine } from "../Models/OrderLine";
 import { OrderService } from "../Service/OrderService";
 import { runInThisContext } from "vm";
@@ -13,13 +13,17 @@ import { runInThisContext } from "vm";
     }`],
     providers: [OrderService]
 })
-export class OrderComponent {
-    CurrentOrder: Order;
+export class OrderComponent implements OnInit {
+    @Input() CurrentOrder: Order;
     orders: Order[] = [];
     displayError: string;
 
     constructor(private orderService: OrderService) {
-        this.CurrentOrder = new Order();
+
+    }
+
+    ngOnInit() {
+        this.CurrentOrder = new Order("test", "test", "test");
     }
 
     public get value(): string {
@@ -27,6 +31,14 @@ export class OrderComponent {
     }
 
 
+    handleError(err){
+        console.log(err);
+        if(err.error.message){
+            this.displayError = err.error.message;
+        }else if(err.message){
+            this.displayError = err.message;
+        }
+    }
     public onSubmit() {
         this.displayError = null;
         console.log("Submit clicked" + this.CurrentOrder.buyer);
@@ -37,15 +49,12 @@ export class OrderComponent {
                     this.CurrentOrder = res;
                     this.get();
                 },
-                err => {
-                    console.log(err);
-                    this.displayError = err.error.message;
-                }
+                (err)=> this.handleError(err)
             );
     }
     public addNewLine() {
         let lineNumber = this.CurrentOrder.orderLines.length + 1;
-        this.CurrentOrder.orderLines.push(new OrderLine(lineNumber));
+        this.CurrentOrder.orderLines.push(new OrderLine(lineNumber, "", 0, 0));
     }
 
     public get() {
@@ -58,12 +67,38 @@ export class OrderComponent {
     }
 
     public showOrder(orderId: number) {
-        this.CurrentOrder = null;
-        
         let searchedOrder = this.orders.find(order => order.orderId === orderId);
+        console.log(searchedOrder);
         if (searchedOrder) {
             this.CurrentOrder = searchedOrder;
         }
+    }
+
+    public cancelLine(indexId: number) {
+        let deleteLine = this.CurrentOrder.orderLines[indexId];
+        if (!deleteLine.orderLineId) {
+            this.CurrentOrder.orderLines.splice(indexId,1);
+        } else {
+            this.orderService.cancelLine(deleteLine)
+                .subscribe(
+                    (res) => this.handleCancelLineResponse(res),
+                    (err)=> this.handleError(err)
+                );
+        }
+
+    }
+
+    handleCancelLineResponse(res: Order){
+        
+            console.log(res);
+            this.CurrentOrder = res;
+            let index = this.orders.findIndex(order => order.orderId === this.CurrentOrder.orderId);
+            this.orders.splice(index, 1, this.CurrentOrder);
+        
+    }
+
+    public updateOrder(){
+        this.orderService.updateOrder(this.CurrentOrder)
     }
 
 

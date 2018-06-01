@@ -4,7 +4,8 @@ public enum State {
 	Draft,
 	Approved,
 	InTransit,
-	Delivered
+	Delivered, 
+	Cancelled
 	
 
 }

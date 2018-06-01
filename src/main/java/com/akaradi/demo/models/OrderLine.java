@@ -80,4 +80,37 @@ public class OrderLine {
 		this.lineNumber = lineNumber;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (lineNumber ^ (lineNumber >>> 32));
+		result = prime * result + ((order == null) ? 0 : order.hashCode());
+		result = prime * result + (int) (orderLineId ^ (orderLineId >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		OrderLine other = (OrderLine) obj;
+		if (lineNumber != other.lineNumber)
+			return false;
+		
+		if (orderLineId != other.orderLineId)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "OrderLine [orderLineId=" + orderLineId + ", itemName=" + itemName + ", quantity=" + quantity
+				+ ", lineNumber=" + lineNumber + ", price=" + price + ", state=" + state + "]";
+	}
+
 }

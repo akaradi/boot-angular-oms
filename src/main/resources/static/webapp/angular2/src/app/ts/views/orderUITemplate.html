@@ -1,0 +1,107 @@
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default col-md-3">
+            <div class="panel-heading">Orders</div>
+            <div class="panel-body">
+                <ul>
+                    <li *ngFor="let order1 of orders">
+                        <a href="javscript:void(0)" (click)="showOrder(order1.orderId)">{{order1.orderNumber}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <form #orderForm="ngForm" (ngSubmit)="onSubmit()">
+            <div class="panel panel-default col-md-9">
+                <div class="panel-heading">Order</div>
+                <div class="panel-heading" *ngIf="displayError">{{displayError}}</div>
+
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="col-md-2">Order Number : </label>
+                            <input type="text" class="form-control-static float:right" [(ngModel)]="CurrentOrder.orderNumber" name="orderNumber" id="orderNumber">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="col-md-2">State : </label>
+                            <span class="form-control-static float:right">{{CurrentOrder.state}}</span>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="col-md-2">Vendor : </label>
+                            <input type="text" class="form-control-static float:right" required [(ngModel)]="CurrentOrder.vendor" name="vendor" id="vendor">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="col-md-2">Buyer : </label>
+                            <input type="text" class="form-control-static float:right" [(ngModel)]="CurrentOrder.buyer" name="buyer" id="buyer">
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="col-md-2">Delivery Date : </label>
+                            <input type="date" class="form-control-static" required [ngModel]="CurrentOrder.deliveryDate|date:'yyyy-MM-dd'" (ngModelChange)="CurrentOrder.deliveryDate=$event"
+                                name="deliveryDate" id="deliveryDate">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="col-md-2">Shipping Date : </label>
+                            <input type="date" class="form-control-static" [ngModel]="CurrentOrder.shipDate|date:'yyyy-MM-dd'" (ngModelChange)="CurrentOrder.shipDate=$event"
+                                name="shipDate" id="shipDate">
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body row">
+
+                    <div class="col-sm-1">
+                        <label>Line No.</label>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>State</label>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Item Name</label>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Quantity</label>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Price</label>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <a href="javscript:void(0)" (click)="addNewLine()">
+                            <span class="glyphicon glyphicon-plus-sign"></span>
+                        </a>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-12 scrollable0panel">
+                            <div class="row" *ngFor="let line of CurrentOrder.orderLines ; let in = index">
+                                <a href="javscript:void(0)" (click)="cancelLine(in)" *ngIf="CurrentOrder.orderLines.length >1">
+                                    <span class="glyphicon glyphicon-remove-sign"></span>
+                                </a>
+                                <input type="text" class="col-sm-1" [disabled]="true" [(ngModel)]="line.lineNumber" name="lineNumber-{{in}}" id="lineNumber">
+                                <input type="text" class="col-sm-2" [disabled]="true" [(ngModel)]="line.state" name="state-{{in}}" id="state">
+                                <input type="text" class="col-sm-2" [(ngModel)]="line.itemName" name="itemName-{{in}}" id="itemName">
+                                <input type="text" class="col-sm-2" [(ngModel)]="line.quantity" name="quantity-{{in}}" id="quantity">
+                                <input type="text" class="col-sm-2" [(ngModel)]="line.price" name="price-{{in}}" id="price">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-default" [disabled]="!orderForm.form.valid" *ngIf="!CurrentOrder.orderId">
+                        Create Order
+                    </button>
+                    <div *ngIf="CurrentOrder.orderId">
+                        <button type="button" class="btn btn-default" [disabled]="!orderForm.form.valid"  (click)="updateOrder()">
+                            Update Order
+                        </button>
+                        <button type="menu" class="btn btn-default" [disabled]="!orderForm.form.valid" >
+                                Approve
+                            </button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+
+    </div>

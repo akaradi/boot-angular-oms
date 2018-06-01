@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.akaradi.demo.enums.State;
 import com.akaradi.demo.models.Order;
+import com.akaradi.demo.models.OrderLine;
 import com.akaradi.demo.repositories.OrderRepository;
 import com.akaradi.demo.services.OrderService;
 
@@ -38,6 +39,19 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public Order getOrderByNumber(String orderNumber) {
 		return orderRepository.getOrderByOrderNumber(orderNumber);
+	}
+	
+	@Override
+	public Order cancelLine(OrderLine orderLine) {
+		Order order = orderRepository.findByOrderLineId(orderLine.getOrderLineId());
+		
+		for(OrderLine line : order.getOrderLines()) {
+			if(line.equals(orderLine)) {
+				line.setState(State.Cancelled);
+			}
+		}
+		return orderRepository.save(order);
+		
 	}
 
 }

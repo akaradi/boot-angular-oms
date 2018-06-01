@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.akaradi.demo.models.Order;
+import com.akaradi.demo.models.OrderLine;
 import com.akaradi.demo.repositories.OrderRepository;
 import com.akaradi.demo.services.OrderService;
 
@@ -41,6 +42,11 @@ public class OrderRestController {
 		order.getOrderLines().stream().forEach(orderLine -> orderLine.setOrder(order));
 		orderService.updateOrder(Collections.singletonList(order));
 		return getOrder(order.getOrderId());
+	}
+	
+	@PutMapping("/cancelLine")
+	public Order updateOrder(@RequestBody OrderLine orderLine) {
+		return orderService.cancelLine(orderLine);
 	}
 	
 	@GetMapping("/getOrder/{id}")
