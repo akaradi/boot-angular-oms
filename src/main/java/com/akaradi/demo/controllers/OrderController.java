@@ -23,7 +23,7 @@ public class OrderController {
 	@RequestMapping("/")
 	public String start(Model model) {
 		LOG.info("Started and Showing index.html");
-		return "index.html";
+		return "index";
 	}
 	
 	@RequestMapping("/addOrder")

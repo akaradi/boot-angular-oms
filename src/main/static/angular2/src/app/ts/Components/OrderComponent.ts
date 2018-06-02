@@ -2,7 +2,6 @@ import { Order } from "../Models/Order";
 import { Component, Input, OnInit } from "@angular/core";
 import { OrderLine } from "../Models/OrderLine";
 import { OrderService } from "../Service/OrderService";
-import { runInThisContext } from "vm";
 
 @Component({
     selector: "order-ui",
@@ -99,6 +98,11 @@ export class OrderComponent implements OnInit {
 
     public updateOrder(){
         this.orderService.updateOrder(this.CurrentOrder)
+        .subscribe(
+            (res) => this.CurrentOrder = res,
+            (err) => this.handleError(err)
+        );
+
     }
 
 

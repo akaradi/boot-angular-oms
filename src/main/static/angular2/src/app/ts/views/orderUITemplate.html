@@ -92,12 +92,13 @@
                         Create Order
                     </button>
                     <div *ngIf="CurrentOrder.orderId">
-                        <button type="button" class="btn btn-default" [disabled]="!orderForm.form.valid"  (click)="updateOrder()">
+                        <button type="button" class="btn btn-default" [disabled]="!orderForm.form.valid" (click)="updateOrder()">
                             Update Order
                         </button>
-                        <button type="menu" class="btn btn-default" [disabled]="!orderForm.form.valid" >
-                                Approve
-                            </button>
+                        <button type="menu" class="btn btn-default" [disabled]="!orderForm.form.valid">
+                            Approve
+                        </button>
+                        
                     </div>
                 </div>
 
