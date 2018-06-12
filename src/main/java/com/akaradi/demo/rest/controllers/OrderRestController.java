@@ -5,6 +5,7 @@ import java.util.Collections;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.akaradi.demo.models.Order;
@@ -55,7 +57,10 @@ public class OrderRestController {
 	}
 	
 	@GetMapping("/getOrders")
-	public Iterable<Order> getOrders(){
+	public Iterable<Order> getOrders(@RequestParam(name="orderNumber",required=false)String orderNumber){
+		if(!StringUtils.isEmpty(orderNumber)) {
+				return orderRepository.getOrdersByOrderNumber(orderNumber);
+		}
 		return orderRepository.findAll();
 	}
 	

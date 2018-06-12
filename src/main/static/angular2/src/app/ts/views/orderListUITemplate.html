@@ -1,0 +1,37 @@
+<mat-card>
+    <mat-table #table [dataSource]="dataSource" class="hoverable">
+
+        <ng-container matColumnDef="orderNumber">
+            <mat-header-cell *matHeaderCellDef> Order Number </mat-header-cell>
+            <mat-cell *matCellDef="let order">
+                <a routerLink="/newOrder/{{order.orderId}}" (click)="showOrder(order.orderId)">{{order.orderNumber}}</a>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="deliveryDate">
+            <mat-header-cell *matHeaderCellDef> Delivery Date </mat-header-cell>
+            <mat-cell *matCellDef="let order ">
+                <div>{{order.deliveryDate | date: 'dd/MM/yyyy'}}</div>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="shipDate">
+            <mat-header-cell *matHeaderCellDef> Ship Date </mat-header-cell>
+            <mat-cell *matCellDef="let order"> {{order.shipDate | date: 'dd/MM/yyyy'}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="buyer">
+            <mat-header-cell *matHeaderCellDef> Buyer </mat-header-cell>
+            <mat-cell *matCellDef="let order"> {{order.buyer}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="vendor">
+            <mat-header-cell *matHeaderCellDef> Vendor </mat-header-cell>
+            <mat-cell *matCellDef="let order"> {{order.vendor}}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
+</mat-card>
+<router-outlet></router-outlet>

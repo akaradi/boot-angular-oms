@@ -16,6 +16,8 @@ public interface OrderRepository extends CrudRepository<Order, Long>{
 	@Query(" from Order o join o.orderLines l where l.orderLineId =  :orderLineId")
 	Order findByOrderLineId(@Param("orderLineId") long orderLineId);
 
+	Iterable<Order> getOrdersByOrderNumber(String orderNumber);
+
 	/*@Query(" from Order o where o.lastModifiedDate BETWEEN date_sub(now(), interval 2 day) AND NOW() order by o.orderId desc")
 	List<Order> fetchRecentFiveOrders();*/
 }

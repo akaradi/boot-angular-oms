@@ -27,6 +27,9 @@ public class Order {
 	private State state;
 	private String orderNumber;
 	private Calendar lastModifiedDate;
+	private String billingAddress;
+	private String sellingAddress;
+	private String buyerAddress;
 	
 	@OneToMany(mappedBy="order", cascade = {CascadeType.PERSIST,CascadeType.MERGE})
 	private List<OrderLine> orderLines= new ArrayList<>();
@@ -118,6 +121,30 @@ public class Order {
 
 	public void setLastModifiedDate(Calendar lastModifiedDate) {
 		this.lastModifiedDate = lastModifiedDate;
+	}
+
+	public String getBillingAddress() {
+		return billingAddress;
+	}
+
+	public void setBillingAddress(String billingAddress) {
+		this.billingAddress = billingAddress;
+	}
+
+	public String getSellingAddress() {
+		return sellingAddress;
+	}
+
+	public void setSellingAddress(String sellingAddress) {
+		this.sellingAddress = sellingAddress;
+	}
+
+	public String getBuyerAddress() {
+		return buyerAddress;
+	}
+
+	public void setBuyerAddress(String buyerAddress) {
+		this.buyerAddress = buyerAddress;
 	}
 
 	@Override
