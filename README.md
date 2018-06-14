@@ -11,6 +11,6 @@ Order search report, State Summary portlets, etc as single page application
 3. Demonstrates use of @Query.
 4. Demonstrates use of @Query and DTO's.
 5. Material Toolbar, Mat buttons, Mat Card.
-6. Angular HttpClientModule, Routing.
+6. Angular HttpClientModule, Routing, Interceptor.
 
 Order Screen involves Adding new lines, cancelling lines, Deleting lines. Hiding actions, hiding icons based on Order states.
