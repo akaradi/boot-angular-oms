@@ -3,15 +3,12 @@ import { Component, Input, OnInit, HostBinding } from "@angular/core";
 import { OrderLine } from "../Models/OrderLine";
 import { OrderService } from "../Service/OrderService";
 import { ActivatedRoute } from "@angular/router";
+import { MatSnackBar } from "@angular/material";
 
 
 @Component({
     selector: "order-ui",
     templateUrl: "../views/orderUITemplate.html",
-    styles: [`.scrollable0panel{
-        max-height: 200px;
-        overflow: auto;
-    }`],
     providers: [OrderService]
 })
 export class OrderComponent implements OnInit {
@@ -24,7 +21,8 @@ export class OrderComponent implements OnInit {
     id;
 
     constructor(private orderService: OrderService,
-        private route: ActivatedRoute) {
+        private route: ActivatedRoute,
+        public snackBar: MatSnackBar) {
 
     }
 
@@ -36,8 +34,8 @@ export class OrderComponent implements OnInit {
             if (this.id !== 0) {
                 this.getOrderById(this.id);
                 console.log(this.CurrentOrder);
-            }else{
-                this.CurrentOrder = new Order("test", "test", "test"); 
+            } else {
+                this.CurrentOrder = new Order("test", "test", "test");
             }
         });
     }
@@ -72,6 +70,7 @@ export class OrderComponent implements OnInit {
                     console.log(res);
                     this.CurrentOrder = res;
                     this.get();
+                    this.updateSnackBar("Order Created");
                 },
                 (err) => this.handleError(err)
             );
@@ -102,10 +101,14 @@ export class OrderComponent implements OnInit {
         let deleteLine = this.CurrentOrder.orderLines[indexId];
         if (!deleteLine.orderLineId) {
             this.CurrentOrder.orderLines.splice(indexId, 1);
+            this.updateSnackBar("Line Deleted");
         } else {
             this.orderService.cancelLine(deleteLine)
                 .subscribe(
-                    (res) => this.handleCancelLineResponse(res),
+                    (res) => {
+                        this.handleCancelLineResponse(res)
+                        this.updateSnackBar("Line Cancelled");
+                    },
                     (err) => this.handleError(err)
                 );
         }
@@ -121,10 +124,19 @@ export class OrderComponent implements OnInit {
 
     }
 
+    private updateSnackBar(msg: string) {
+        this.snackBar.open(msg, "", {
+            duration: 2000,
+        });
+    }
     public updateOrder() {
+
         this.orderService.updateOrder(this.CurrentOrder)
             .subscribe(
-                (res) => this.CurrentOrder = res,
+                (res) => {
+                    this.CurrentOrder = res;
+                    this.updateSnackBar("Order Updated");
+                },
                 (err) => this.handleError(err)
             );
 

@@ -1,7 +1,4 @@
-import { Order } from "../Models/Order";
-import { Component, Input, OnInit } from "@angular/core";
-import { OrderLine } from "../Models/OrderLine";
-import { OrderService } from "../Service/OrderService";
+import { Component, OnInit } from "@angular/core";
 import { Action } from "../Models/Action";
 
 @Component({

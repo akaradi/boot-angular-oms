@@ -10,7 +10,7 @@ import { DataSource } from "@angular/cdk/table";
 
 
 @Component({
-    selector: "order-ui",
+    selector: "order-list",
     templateUrl: "../views/orderListUITemplate.html",
     styles: [`.scrollable1panel{
         max-height: 500px;
@@ -59,7 +59,6 @@ export class OrderListComponent implements OnInit, AfterViewInit {
     }
 
     public getOrders(orderNumber: string) {
-
         this.orderService.getOrders(orderNumber).subscribe(
             (resp) => this.handleResponse(resp),
             (err) => console.log(err),

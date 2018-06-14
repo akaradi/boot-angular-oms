@@ -7,16 +7,23 @@
     border-left: 5px solid #a94442; /* red */
   /* }  */
 
+  html{
+    overflow-y: auto;
+    
+}
+  .scrollable0panel{
+    max-height: 200px;
+    overflow: auto;
+ }
   body {
-    margin: 0;
+    margin: 1px;
     font-family: Roboto, sans-serif;
   }
   
   mat-card {
-    max-width: 80%;
     margin: 1px auto;
     text-align: left;
-    background: ghostwhite;
+    
   }
   
   mat-card-title {
@@ -24,6 +31,7 @@
     margin: 1%;
     padding: 0%;
     text-align: left;
+    color: blue;
   }
 
   div.row{
@@ -35,5 +43,14 @@
     width:500px;
  }
  search-form{
-   width: 800px;
+   width: 550px;
+ }
+
+ .portlet {
+  width: 95%;
+  height: 100%;
+  padding: 1%;
+  max-height: max-content;
+  overflow: auto;
+  background-color: steelblue;
  }

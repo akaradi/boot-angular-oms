@@ -5,16 +5,26 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.ColumnResult;
 import javax.persistence.Entity;
+import javax.persistence.EntityResult;
+import javax.persistence.FieldResult;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 
+import com.akaradi.demo.DTO.StateSummary;
 import com.akaradi.demo.enums.State;
 
+@SqlResultSetMapping(name = "stateSummary", entities = {
+		@EntityResult(entityClass = StateSummary.class, fields = { @FieldResult(name = "state", column = "state"),
+				@FieldResult(name = "count", column = "count") }) }, columns = { @ColumnResult(name = "count") }
+
+)
 @Entity
-@Table(name="enhanced_order")
+@Table(name = "enhanced_order")
 public class Order {
 	@Id
 	@GeneratedValue
@@ -30,10 +40,10 @@ public class Order {
 	private String billingAddress;
 	private String sellingAddress;
 	private String buyerAddress;
-	
-	@OneToMany(mappedBy="order", cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-	private List<OrderLine> orderLines= new ArrayList<>();
-	
+
+	@OneToMany(mappedBy = "order", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	private List<OrderLine> orderLines = new ArrayList<>();
+
 	public Order() {
 	}
 
@@ -72,7 +82,7 @@ public class Order {
 	public List<OrderLine> getOrderLines() {
 		return orderLines;
 	}
-	
+
 	public Calendar getDeliveryDate() {
 		return deliveryDate;
 	}
@@ -104,12 +114,12 @@ public class Order {
 	public void setOrderNumber(String orderNumber) {
 		this.orderNumber = orderNumber;
 	}
-	
+
 	public void addOrderLine(OrderLine line) {
 		this.orderLines.add(line);
 		line.setOrder(this);
 	}
-	
+
 	public void removeOrderLine(OrderLine line) {
 		this.orderLines.remove(line);
 		line.setOrder(null);
@@ -180,5 +190,5 @@ public class Order {
 		return "Order [orderId=" + orderId + ", vendor=" + vendor + ", buyer=" + buyer + ", deliveryDate="
 				+ deliveryDate + ", shipDate=" + shipDate + ", state=" + state + ", orderNumber=" + orderNumber + "]";
 	}
-	
+
 }
