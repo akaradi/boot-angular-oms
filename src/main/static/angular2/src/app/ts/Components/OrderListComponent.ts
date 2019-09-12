@@ -26,7 +26,7 @@ export class OrderListComponent implements OnInit, AfterViewInit {
     dataSource = new MatTableDataSource<Order>(this.orders);
     displayedColumns = ["orderNumber", "buyer", "vendor", "deliveryDate", "shipDate"];
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatPaginator,{static: false}) paginator: MatPaginator;
 
     constructor(private orderService: OrderService,
         private route: ActivatedRoute) {
