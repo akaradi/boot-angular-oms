@@ -1,180 +1,171 @@
 <form #orderForm="ngForm">
-    <mat-card [style.background]="ghostwhite">
-        <mat-card-title class="mat-primary">
-            <span *ngIf="!CurrentOrder.state"> Order </span>
-            <span *ngIf="CurrentOrder.state">{{CurrentOrder.orderNumber}}: {{CurrentOrder.state}}</span>
-        </mat-card-title>
-
-        <mat-divider></mat-divider>
-        <div>&nbsp;</div>
-        <mat-card-content>
-            <div class="row">
+	<mat-card> <mat-card-title class="mat-primary">
+	<span *ngIf="!CurrentOrder.state"> Order </span> <span
+		*ngIf="CurrentOrder.state">{{CurrentOrder.orderNumber}}:
+		{{CurrentOrder.state}}</span> </mat-card-title> <mat-divider></mat-divider>
+	<div>&nbsp;</div>
+	<mat-card-content>
+	<div class="row">
 
 
 
-                <div style="color: darkred" *ngIf="displayError">
-                    {{displayError}}
-                    <mat-divider></mat-divider>
-                </div>
+		<div style="color: darkred" *ngIf="displayError">
+			{{displayError}}
+			<mat-divider></mat-divider>
+		</div>
 
 
-                <div class="row">
-                    <div class="form-group col-xs-3">
-                        <mat-form-field>
-                            <input type="text" matInput placeholder="Order Number" class="form-control-static float:right" [(ngModel)]="CurrentOrder.orderNumber"
-                                name="orderNumber" id="orderNumber">
-                        </mat-form-field>
-                    </div>
-                    <div class="form-group col-xs-3">
+		<div class="row">
+			<div class="form-group col-xs-3">
+				<mat-form-field> <input type="text" matInput
+					placeholder="Order Number" class="form-control-static float:right"
+					[(ngModel)]="CurrentOrder.orderNumber" name="orderNumber"
+					id="orderNumber"> </mat-form-field>
+			</div>
+			<div class="form-group col-xs-3">
+				<mat-form-field> <input type="text" matInput
+					placeholder="Order Number" class="form-control-static float:right"
+					[(ngModel)]="CurrentOrder.state" name="state"
+					id="state"> </mat-form-field>
+
+			</div>
+
+		</div>
+		<div class="row">
+			<div class="form-group col-xs-3">
+
+				<mat-form-field> <input type="text" matInput
+					placeholder="Vendor" class="form-control-static float:right"
+					required [(ngModel)]="CurrentOrder.vendor" name="vendor"
+					id="vendor"> </mat-form-field>
+			</div>
+			<div class="form-group col-xs-3">
+				<mat-form-field> <input type="text" matInput
+					placeholder="Buyer" class="form-control-static float:right"
+					[(ngModel)]="CurrentOrder.buyer" name="buyer" id="buyer"> </mat-form-field>
+			</div>
+
+		</div>
+		<div class="row">
+			<div class="form-group col-xs-3">
+
+				<mat-form-field> <input type="date" matInput
+					placeholder="Delivery Date" class="form-control-static" required
+					[ngModel]="CurrentOrder.deliveryDate|date:'yyyy-MM-dd'"
+					(ngModelChange)="CurrentOrder.deliveryDate=$event"
+					name="deliveryDate" id="deliveryDate"> </mat-form-field>
+			</div>
+			<div class="form-group col-xs-3">
+
+				<mat-form-field> <input type="date" matInput
+					placeholder="Ship Date" class="form-control-static"
+					[ngModel]="CurrentOrder.shipDate|date:'yyyy-MM-dd'"
+					(ngModelChange)="CurrentOrder.shipDate=$event" name="shipDate"
+					id="shipDate"> </mat-form-field>
+			</div>
+		</div>
+
+		<mat-divider></mat-divider>
+		<mat-tab-group> <mat-tab label="Order Lines">
+		<div>&nbsp;</div>
+		<div>
+			<div class="row">
+				<div class="col-sm-1">
+					<label>Line No.</label>
+				</div>
+				<div class="col-sm-2">
+					<label>State</label>
+				</div>
+				<div class="col-sm-2">
+					<label>Item Name</label>
+				</div>
+				<div class="col-sm-2">
+					<label>Quantity</label>
+				</div>
+				<div class="col-sm-2">
+					<label>Price</label>
+				</div>
+
+				<div>
+					<a href="javscript:void(0)" (click)="addNewLine()"> <!-- <span class="glyphicon glyphicon-plus-sign"></span> -->
+						<mat-icon>add_circle</mat-icon>
+					</a>
+				</div>
+			</div>
+
+			<div class="row " class="scrollable0panel">
+				<div class="form-group  ">
+
+					<div class="row"
+						*ngFor="let line of CurrentOrder.orderLines ; let in = index">
+
+						<a href="javscript:void(0)" (click)="cancelLine(in)"
+							*ngIf="CurrentOrder.orderLines.length >1 && line.state != 'Cancelled'">
+
+							<mat-icon matRemove>cancel</mat-icon>
+						</a>
+						<mat-form-field class="col-xs-1"> <input
+							type="text" matInput [disabled]="true"
+							[(ngModel)]="line.lineNumber" name="lineNumber-{{in}}"
+							id="lineNumber"> </mat-form-field>
+						<mat-form-field class="col-xs-2"> <input
+							type="text" matInput [disabled]="true" [(ngModel)]="line.state"
+							name="state-{{in}}" id="state"> </mat-form-field>
+						<mat-form-field class="col-xs-2"> <input
+							type="text" matInput [(ngModel)]="line.itemName"
+							name="itemName-{{in}}" id="itemName"> </mat-form-field>
+						<mat-form-field class="col-xs-2"> <input
+							type="text" matInput [(ngModel)]="line.quantity"
+							name="quantity-{{in}}" id="quantity"> </mat-form-field>
+						<mat-form-field class="col-xs-2"> <input
+							type="text" matInput [(ngModel)]="line.price" name="price-{{in}}"
+							id="price"> </mat-form-field>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		</mat-tab> <mat-tab label="Address" dynamicHeight="true">
+		<div>
+			<mat-form-field class="example-full-width"> <textarea
+				matInput [(ngModel)]="CurrentOrder.billingAddress" name="bAddress"
+				placeholder="Billing Address"></textarea> </mat-form-field>
+		</div>
+		<div>
+			<mat-form-field class="example-full-width"> <textarea
+				matInput [(ngModel)]="CurrentOrder.buyerAddress" name="cAddress"
+				placeholder="Customer Address"></textarea> </mat-form-field>
+		</div>
+		<div>
+			<mat-form-field class="example-full-width"> <textarea
+				matInput [(ngModel)]="CurrentOrder.sellingAddress" name="sAddress"
+				placeholder="Shipping Address"></textarea> </mat-form-field>
+		</div>
+		</mat-tab> </mat-tab-group>
 
 
+	</div>
+	</mat-card-content> <mat-card-actions align="end">
 
+	<button (click)="onSubmit()" mat-raised-button
+		[disabled]="!orderForm.form.valid" *ngIf="!CurrentOrder.orderId">
+		Create Order</button>
 
-                    </div>
+	<div *ngIf="CurrentOrder.orderId">
+		<button mat-raised-button [matMenuTriggerFor]="menu">Actions</button>
+		<mat-menu #menu="matMenu">
 
-                </div>
-                <div class="row">
-                    <div class="form-group col-xs-3">
+		<button mat-button *ngIf="CurrentOrder.state!=='Cancelled'"
+			[disabled]="!orderForm.form.valid" (click)="updateOrder()">
+			Update</button>
+		<button mat-button [disabled]="!orderForm.form.valid" (click)="approveOrder()">
+			Approve</button>
+		<button mat-button [disabled]="!orderForm.form.valid" (click)="cancelOrder()">Cancel
+		</button>
 
-                        <mat-form-field>
-                            <input type="text" matInput placeholder="Vendor" class="form-control-static float:right" required [(ngModel)]="CurrentOrder.vendor"
-                                name="vendor" id="vendor">
-                        </mat-form-field>
-                    </div>
-                    <div class="form-group col-xs-3">
-                        <mat-form-field>
-                            <input type="text" matInput placeholder="Buyer" class="form-control-static float:right" [(ngModel)]="CurrentOrder.buyer"
-                                name="buyer" id="buyer">
-                        </mat-form-field>
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="form-group col-xs-3">
-
-                        <mat-form-field>
-                            <input type="date" matInput placeholder="Delivery Date" class="form-control-static" required [ngModel]="CurrentOrder.deliveryDate|date:'yyyy-MM-dd'"
-                                (ngModelChange)="CurrentOrder.deliveryDate=$event" name="deliveryDate" id="deliveryDate">
-                        </mat-form-field>
-                    </div>
-                    <div class="form-group col-xs-3">
-
-                        <mat-form-field>
-                            <input type="date" matInput placeholder="Ship Date" class="form-control-static" [ngModel]="CurrentOrder.shipDate|date:'yyyy-MM-dd'"
-                                (ngModelChange)="CurrentOrder.shipDate=$event" name="shipDate" id="shipDate">
-                        </mat-form-field>
-                    </div>
-                </div>
-
-                <mat-divider></mat-divider>
-                <mat-tab-group >
-                    <mat-tab label="Order Lines" >
-                            <div>&nbsp;</div>
-                        <div>
-                            <div class="row">
-                                <div class="col-sm-1">
-                                    <label>Line No.</label>
-                                </div>
-                                <div class="col-sm-2">
-                                    <label>State</label>
-                                </div>
-                                <div class="col-sm-2">
-                                    <label>Item Name</label>
-                                </div>
-                                <div class="col-sm-2">
-                                    <label>Quantity</label>
-                                </div>
-                                <div class="col-sm-2">
-                                    <label>Price</label>
-                                </div>
-
-                                <div>
-                                    <a href="javscript:void(0)" (click)="addNewLine()">
-                                        <!-- <span class="glyphicon glyphicon-plus-sign"></span> -->
-                                        <mat-icon >add_circle</mat-icon>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="row " class="scrollable0panel">
-                                <div class="form-group  ">
-
-                                    <div class="row" *ngFor="let line of CurrentOrder.orderLines ; let in = index">
-
-                                        <a href="javscript:void(0)" (click)="cancelLine(in)" *ngIf="CurrentOrder.orderLines.length >1 && line.state != 'Cancelled'">
-                                            
-                                            <mat-icon matRemove >cancel</mat-icon>
-                                        </a>
-                                        <mat-form-field class="col-xs-1">
-                                            <input type="text" matInput [disabled]="true" [(ngModel)]="line.lineNumber" name="lineNumber-{{in}}" id="lineNumber">
-                                        </mat-form-field>
-                                        <mat-form-field class="col-xs-2">
-                                            <input type="text" matInput [disabled]="true" [(ngModel)]="line.state" name="state-{{in}}" id="state">
-                                        </mat-form-field>
-                                        <mat-form-field class="col-xs-2">
-                                            <input type="text" matInput [(ngModel)]="line.itemName" name="itemName-{{in}}" id="itemName">
-                                        </mat-form-field>
-                                        <mat-form-field class="col-xs-2">
-                                            <input type="text" matInput [(ngModel)]="line.quantity" name="quantity-{{in}}" id="quantity">
-                                        </mat-form-field>
-                                        <mat-form-field class="col-xs-2">
-                                            <input type="text" matInput [(ngModel)]="line.price" name="price-{{in}}" id="price">
-                                        </mat-form-field>
-
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </mat-tab>
-                    <mat-tab label="Address" dynamicHeight="true">
-                        <div>
-                            <mat-form-field class="example-full-width">
-
-                                <textarea matInput [(ngModel)]="CurrentOrder.billingAddress" name="bAddress" placeholder="Billing Address"></textarea>
-                            </mat-form-field>
-                        </div>
-                        <div>
-                            <mat-form-field class="example-full-width">
-
-                                <textarea matInput [(ngModel)]="CurrentOrder.buyerAddress" name="cAddress" placeholder="Customer Address"></textarea>
-                            </mat-form-field>
-                        </div>
-                        <div>
-                            <mat-form-field class="example-full-width">
-
-                                <textarea matInput [(ngModel)]="CurrentOrder.sellingAddress" name="sAddress" placeholder="Shipping Address"></textarea>
-                            </mat-form-field>
-                        </div>
-                    </mat-tab>
-                </mat-tab-group>
-
-
-            </div>
-        </mat-card-content>
-        <mat-card-actions align="end">
-
-            <button (click)="onSubmit()"  mat-raised-button [disabled]="!orderForm.form.valid" *ngIf="!CurrentOrder.orderId">
-                Create Order
-            </button>
-
-            <div *ngIf="CurrentOrder.orderId">
-                <button mat-raised-button [matMenuTriggerFor]="menu">Actions</button>
-                <mat-menu #menu="matMenu">
-
-                    <button mat-button *ngIf="CurrentOrder.state!=='Cancelled'" [disabled]="!orderForm.form.valid" (click)="updateOrder()">
-                        Update
-                    </button>
-                    <button mat-button [disabled]="!orderForm.form.valid">
-                        Approve
-                    </button>
-                    <button mat-button [disabled]="!orderForm.form.valid">
-                        Cancel
-                    </button>
-
-                </mat-menu>
-            </div>
-        </mat-card-actions>
-    </mat-card>
+		</mat-menu>
+	</div>
+	</mat-card-actions> </mat-card>
 </form>

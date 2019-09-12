@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.akaradi.demo.models.Order;
 import com.akaradi.demo.models.OrderLine;
 import com.akaradi.demo.services.OrderService;
-import com.akaradi.demo.services.impl.OrderServiceImpl;
+import com.akaradi.demo.services.OrderServiceImpl;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

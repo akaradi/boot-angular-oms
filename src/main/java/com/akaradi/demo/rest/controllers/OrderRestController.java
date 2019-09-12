@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.akaradi.demo.DTO.StateSummary;
+import com.akaradi.demo.enums.State;
 import com.akaradi.demo.models.Order;
 import com.akaradi.demo.models.OrderLine;
-
 import com.akaradi.demo.repositories.OrderRepository;
 import com.akaradi.demo.services.OrderService;
 
@@ -49,6 +48,20 @@ public class OrderRestController {
 		orderService.updateOrder(Collections.singletonList(order));
 		return getOrder(order.getOrderId());
 	}
+	
+	@PutMapping("/approveOrder")
+	public Order approveOrder(@RequestBody Order order) {
+		order.getOrderLines().stream().forEach(orderLine -> orderLine.setOrder(order));
+		orderService.approveOrder(Collections.singletonList(order));
+		return getOrder(order.getOrderId());
+	}
+	
+	@PutMapping("/cancelOrder")
+	public Order cancelOrder(@RequestBody Order order) {
+		order.getOrderLines().stream().forEach(orderLine -> orderLine.setOrder(order));
+		orderService.cancelOrder(Collections.singletonList(order));
+		return getOrder(order.getOrderId());
+	}
 
 	@PutMapping("/cancelLine")
 	public Order updateOrder(@RequestBody OrderLine orderLine) {
@@ -68,10 +81,15 @@ public class OrderRestController {
 		}
 		return orderRepository.findAll();
 	}
-	
+
 	@GetMapping("/stateSummary")
 	public List<StateSummary> getStateSummary() {
 		return orderRepository.fetchStateSummary();
+	}
+
+	@GetMapping("/getActions")
+	public List<String> getActions(@RequestParam(name = "orderState", required = false) String state) {
+		return orderService.getActions(State.valueOf(state));
 	}
 
 }

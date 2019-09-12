@@ -28,9 +28,21 @@ export class OrderService {
             .pipe(map((resp) => resp as Order));
     }
 
+    approveOrder(order: Order): Observable<Order> {
+        return this._httpClient
+            .put(OrderService.baseUrl + "/approveOrder", order)
+            .pipe(map((resp) => resp as Order));
+    }
+
+    cancelOrder(order: Order): Observable<Order> {
+        return this._httpClient
+            .put(OrderService.baseUrl + "/cancelOrder", order)
+            .pipe(map((resp) => resp as Order));
+    }
+
     getOrders(orderNumber: string): Observable<Order[]> {
         return this._httpClient
-            .get(OrderService.baseUrl + "/getOrders?orderNumber="+orderNumber)
+            .get(OrderService.baseUrl + "/getOrders?orderNumber=" + orderNumber)
             .pipe(map((resp) => resp as Order[]));
     }
     getOrderById(id: number): Observable<Order> {
@@ -44,12 +56,19 @@ export class OrderService {
             .pipe(map((resp) => resp as Order));
     }
 
+    getActions(state: string): Observable<string[]> {
+        return this._httpClient
+            .get(OrderService.baseUrl + "/getActions?orderState=" + state)
+            .pipe(map((resp) => resp as string[]));
+    }
+
+
     @Output() change: EventEmitter<Order> = new EventEmitter();
 
     showOrder(order: Order) {
         this.change.emit(order);
     }
 
-    
+
 
 }
