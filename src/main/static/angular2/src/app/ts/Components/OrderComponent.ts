@@ -28,7 +28,6 @@ export class OrderComponent implements OnInit {
 
     ngOnInit() {
         this.CurrentOrder = new Order("test", "test", "test");
-        //this.orderService.change.subscribe(order => this.CurrentOrder = order);
         this.sub = this.route.params.subscribe(params => {
             this.id = +params['id']; // (+) converts string 'id' to a number
             if (this.id !== 0) {
@@ -52,6 +51,7 @@ export class OrderComponent implements OnInit {
         } else if (err.message) {
             this.displayError = err.message;
         }
+        this.updateSnackBar(this.displayError);
     }
 
     public getOrderById(id: number): Order {
@@ -75,11 +75,7 @@ export class OrderComponent implements OnInit {
                 (err) => this.handleError(err)
             );
     }
-    public addNewLine() {
-        let lineNumber = this.CurrentOrder.orderLines.length + 1;
-        this.CurrentOrder.orderLines.push(new OrderLine(lineNumber, "", 0, 0));
-    }
-
+    
     public get() {
         this.orderService.getOrders(null)
             .subscribe(
@@ -97,38 +93,12 @@ export class OrderComponent implements OnInit {
         }
     }
 
-    public cancelLine(indexId: number) {
-        let deleteLine = this.CurrentOrder.orderLines[indexId];
-        if (!deleteLine.orderLineId) {
-            this.CurrentOrder.orderLines.splice(indexId, 1);
-            this.updateSnackBar("Line Deleted");
-        } else {
-            this.orderService.cancelLine(deleteLine)
-                .subscribe(
-                    (res) => {
-                        this.handleCancelLineResponse(res)
-                        this.updateSnackBar("Line Cancelled");
-                    },
-                    (err) => this.handleError(err)
-                );
-        }
-
-    }
-
-    handleCancelLineResponse(res: Order) {
-
-        console.log(res);
-        this.CurrentOrder = res;
-        let index = this.orders.findIndex(order => order.orderId === this.CurrentOrder.orderId);
-        this.orders.splice(index, 1, this.CurrentOrder);
-
-    }
-
     private updateSnackBar(msg: string) {
-        this.snackBar.open(msg, "", {
-            duration: 2000,
-        });
+            this.snackBar.open(msg, "", {
+                duration: 2000,
+            });
     }
+    
     public updateOrder() {
 
         this.orderService.updateOrder(this.CurrentOrder)
@@ -136,6 +106,32 @@ export class OrderComponent implements OnInit {
                 (res) => {
                     this.CurrentOrder = res;
                     this.updateSnackBar("Order Updated");
+                },
+                (err) => this.handleError(err)
+            );
+
+    }
+
+    public approveOrder() {
+
+        this.orderService.approveOrder(this.CurrentOrder)
+            .subscribe(
+                (res) => {
+                    this.CurrentOrder = res;
+                    this.updateSnackBar("Order Approved");
+                },
+                (err) => this.handleError(err)
+            );
+
+    }
+
+    public cancelOrder() {
+
+        this.orderService.cancelOrder(this.CurrentOrder)
+            .subscribe(
+                (res) => {
+                    this.CurrentOrder = res;
+                    this.updateSnackBar("Order Cancelled");
                 },
                 (err) => this.handleError(err)
             );

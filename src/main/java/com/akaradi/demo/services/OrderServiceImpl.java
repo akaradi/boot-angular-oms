@@ -7,13 +7,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.akaradi.demo.DTO.StateSummary;
 import com.akaradi.demo.constants.OrderConstants;
 import com.akaradi.demo.enums.State;
 import com.akaradi.demo.models.Order;
 import com.akaradi.demo.models.OrderLine;
 import com.akaradi.demo.repositories.OrderRepository;
+import com.akaradi.demo.repositories.OrderRepositoryJPA;
+import com.akaradi.demo.specifications.OrderSearchSpecification;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -21,14 +25,12 @@ public class OrderServiceImpl implements OrderService {
 	static List<State> ignoredStates = Arrays.asList(State.Cancelled);
 
 	OrderRepository orderRepository;
-
-	public OrderServiceImpl() {
-
-	}
+	OrderRepositoryJPA orderRepositoryJpa;
 
 	@Autowired
-	public OrderServiceImpl(OrderRepository orderRepository) {
+	public OrderServiceImpl(OrderRepository orderRepository, OrderRepositoryJPA orderRepositoryJpa) {
 		this.orderRepository = orderRepository;
+		this.orderRepositoryJpa = orderRepositoryJpa;
 	}
 
 	@Override
@@ -58,6 +60,16 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public Order getOrderByNumber(String orderNumber) {
 		return orderRepository.getOrderByOrderNumber(orderNumber);
+	}
+
+	@Override
+	public List<Order> searchOrder(String orderNumber, PageRequest pageRequest) {
+		return orderRepositoryJpa.findAll(new OrderSearchSpecification(orderNumber), pageRequest).getContent();
+	}
+
+	@Override
+	public Long searchOrderCount(String orderNumber) {
+		return orderRepositoryJpa.count(new OrderSearchSpecification(orderNumber));
 	}
 
 	@Override
@@ -116,6 +128,26 @@ public class OrderServiceImpl implements OrderService {
 	private void setLineState(Order order, State state) {
 		order.getOrderLines().stream().filter(line -> !ignoredStates.contains(line.getState()))
 				.forEach(line -> line.setState(state));
+	}
+
+	@Override
+	public Order findById(Long orderId) {
+		return orderRepository.findById(orderId).get();
+	}
+
+	@Override
+	public Iterable<Order> getOrdersByOrderNumber(String orderNumber) {
+		return orderRepositoryJpa.findAll(new OrderSearchSpecification(orderNumber));
+	}
+
+	@Override
+	public Iterable<Order> findAll() {
+		return orderRepository.findAll();
+	}
+
+	@Override
+	public List<StateSummary> fetchStateSummary() {
+		return orderRepository.fetchStateSummary();
 	}
 
 }

@@ -1,5 +1,11 @@
 <mat-card>
     <mat-card-title>Order Search</mat-card-title>
+    <mat-form-field>
+        <input type="text" matInput placeholder="by Number/Item" name="searchOrder" id="searchOrder" color="white" #searchOrder>
+    </mat-form-field>
+    <div class="spinner-container" *ngIf="dataSource.loading$ | async">
+        <mat-spinner></mat-spinner>
+    </div>
     <mat-table #table [dataSource]="dataSource" class="hoverable">
 
         <ng-container matColumnDef="orderNumber">
@@ -7,6 +13,10 @@
             <mat-cell *matCellDef="let order">
                 <a routerLink="/newOrder/{{order.orderId}}" (click)="showOrder(order.orderId)">{{order.orderNumber}}</a>
             </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="state">
+            <mat-header-cell *matHeaderCellDef> State </mat-header-cell>
+            <mat-cell *matCellDef="let order"> {{order.state}}</mat-cell>
         </ng-container>
         <ng-container matColumnDef="deliveryDate">
             <mat-header-cell *matHeaderCellDef> Delivery Date </mat-header-cell>
@@ -32,7 +42,11 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </mat-table>
-    <mat-paginator [length]="100" [pageSize]="8" [pageSizeOptions]="[5, 10, 25, 100]">
+    <mat-paginator #orderPaginator 
+    [length]="orderCount" 
+    [pageSize]="pageSize" 
+    [pageSizeOptions]="pageSizeOptions"
+    (page)="onPageFired($event)">
     </mat-paginator>
 </mat-card>
 <router-outlet></router-outlet>

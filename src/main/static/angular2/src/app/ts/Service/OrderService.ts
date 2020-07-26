@@ -45,6 +45,20 @@ export class OrderService {
             .get(OrderService.baseUrl + "/getOrders?orderNumber=" + orderNumber)
             .pipe(map((resp) => resp as Order[]));
     }
+
+    getOrdersPage(filter='', sortDirection: string,
+        pageIndex:number, pageSize:number): Observable<Order[]> {
+        return this._httpClient
+            .get(OrderService.baseUrl + "/getOrders?filter=" + filter+"&pageIndex="+pageIndex+"&pageSize="+pageSize+"&sortDirection="+sortDirection)
+            .pipe(map((resp) => resp as Order[]));
+    }
+
+    getOrdersCount(filter=''): Observable<number> {
+        return this._httpClient
+            .get(OrderService.baseUrl + "/getOrdersCount?filter=" + filter)
+            .pipe(map((resp) => resp as number));
+    }
+
     getOrderById(id: number): Observable<Order> {
         return this._httpClient
             .get(OrderService.baseUrl + "/getOrder/" + id)

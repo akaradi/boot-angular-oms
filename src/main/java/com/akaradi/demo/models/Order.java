@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.ColumnResult;
 import javax.persistence.Entity;
 import javax.persistence.EntityResult;
+import javax.persistence.FetchType;
 import javax.persistence.FieldResult;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -41,7 +42,7 @@ public class Order {
 	private String sellingAddress;
 	private String buyerAddress;
 
-	@OneToMany(mappedBy = "order", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<OrderLine> orderLines = new ArrayList<>();
 
 	public Order() {
@@ -81,6 +82,7 @@ public class Order {
 
 	public List<OrderLine> getOrderLines() {
 		return orderLines;
+		// return null;
 	}
 
 	public Calendar getDeliveryDate() {

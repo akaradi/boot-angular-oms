@@ -1,0 +1,62 @@
+		<mat-divider></mat-divider>
+		
+		<div>&nbsp;</div>
+		<div>
+			<div class="row">
+				<div class="col-sm-1">
+					<label>Line No.</label>
+				</div>
+				<div class="col-sm-2">
+					<label>State</label>
+				</div>
+				<div class="col-sm-2">
+					<label>Item Name</label>
+				</div>
+				<div class="col-sm-2">
+					<label>Quantity</label>
+				</div>
+				<div class="col-sm-2">
+					<label>Price</label>
+				</div>
+
+				<div>
+					<a href="javscript:void(0)" (click)="addNewLine()"> <!-- <span class="glyphicon glyphicon-plus-sign"></span> -->
+						<mat-icon>add_circle</mat-icon>
+					</a>
+				</div>
+			</div>
+
+			<div class="row " class="scrollable0panel">
+				<div class="form-group  ">
+
+					<div class="row"
+						*ngFor="let line of orderLines ; let in = index">
+
+						<a href="javscript:void(0)" (click)="cancelLine(in)"
+							*ngIf="orderLines.length >1 && line.state != 'Cancelled'">
+
+							<mat-icon matRemove>cancel</mat-icon>
+						</a>
+						<mat-form-field class="col-xs-1"> <input
+							type="text" matInput [disabled]="true"
+							[(ngModel)]="line.lineNumber" name="lineNumber-{{in}}"
+							id="lineNumber"> </mat-form-field>
+						<mat-form-field class="col-xs-2"> <input
+							type="text" matInput [disabled]="true" [(ngModel)]="line.state"
+							name="state-{{in}}" id="state"> </mat-form-field>
+						<mat-form-field class="col-xs-2"> <input
+							type="text" matInput [(ngModel)]="line.itemName"
+							name="itemName-{{in}}" id="itemName"> </mat-form-field>
+						<mat-form-field class="col-xs-2"> <input
+							type="text" matInput [(ngModel)]="line.quantity"
+							name="quantity-{{in}}" id="quantity"> </mat-form-field>
+						<mat-form-field class="col-xs-2"> <input
+							type="text" matInput [(ngModel)]="line.price" name="price-{{in}}"
+							id="price"> </mat-form-field>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+	

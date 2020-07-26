@@ -3,9 +3,8 @@ package com.akaradi.demo.rest.controllers;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +28,7 @@ import com.akaradi.demo.services.OrderService;
 @CrossOrigin
 public class OrderRestController {
 
-	@Resource
+	@Autowired
 	private OrderService orderService;
 
 	@Autowired
@@ -48,14 +47,14 @@ public class OrderRestController {
 		orderService.updateOrder(Collections.singletonList(order));
 		return getOrder(order.getOrderId());
 	}
-	
+
 	@PutMapping("/approveOrder")
 	public Order approveOrder(@RequestBody Order order) {
 		order.getOrderLines().stream().forEach(orderLine -> orderLine.setOrder(order));
 		orderService.approveOrder(Collections.singletonList(order));
 		return getOrder(order.getOrderId());
 	}
-	
+
 	@PutMapping("/cancelOrder")
 	public Order cancelOrder(@RequestBody Order order) {
 		order.getOrderLines().stream().forEach(orderLine -> orderLine.setOrder(order));
@@ -70,21 +69,32 @@ public class OrderRestController {
 
 	@GetMapping("/getOrder/{id}")
 	public Order getOrder(@PathVariable(name = "id") Long orderId) {
-		return orderRepository.findById(orderId).get();
+		return orderService.findById(orderId);
 	}
 
 	@GetMapping("/getOrders")
-	public Iterable<Order> getOrders(@RequestParam(name = "orderNumber", required = false) String orderNumber) {
+	public Iterable<Order> getOrders(@RequestParam(name = "filter", required = false) String orderNumber,
+			@RequestParam(name = "pageSize", required = false) Integer pageSize,
+			@RequestParam(name = "pageIndex", required = false) Integer pageIndex,
+			@RequestParam(name = "sort", required = false) String sort) {
+		PageRequest pageRequest = PageRequest.of(pageIndex, pageSize);
 		if (!StringUtils.isEmpty(orderNumber)) {
 			orderNumber = orderNumber.replaceAll("\\*", "\\%");
-			return orderRepository.getOrdersByOrderNumber(orderNumber);
 		}
-		return orderRepository.findAll();
+		Iterable<Order> orderList = orderService.searchOrder(orderNumber, pageRequest);
+		return orderList;
+	}
+
+	@GetMapping("/getOrdersCount")
+	public Long getOrdersCount(@RequestParam(name = "filter", required = false) String orderNumber) {
+		orderNumber = orderNumber.replaceAll("\\*", "\\%");
+		Long orderListCount = orderService.searchOrderCount(orderNumber);
+		return orderListCount;
 	}
 
 	@GetMapping("/stateSummary")
 	public List<StateSummary> getStateSummary() {
-		return orderRepository.fetchStateSummary();
+		return orderService.fetchStateSummary();
 	}
 
 	@GetMapping("/getActions")

@@ -27,7 +27,7 @@ import { OrderModule } from './ts/Modules/OrderModule';
     MatMenuModule,
     MatToolbarModule,
     MatButtonModule,
-    BrowserAnimationsModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule,
+    BrowserAnimationsModule, MatFormFieldModule, MatFormFieldModule, MatInputModule,
     FormsModule,
     OrderModule,
 
